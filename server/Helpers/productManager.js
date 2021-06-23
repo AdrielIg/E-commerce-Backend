@@ -25,7 +25,10 @@ class ProductManager {
   }
 
   addProduct(product) {
-    const newProduct = { ...product, id: this.products[this.products.length - 1].id + 1 }
+    const newProduct = new CartItem({ ...product, id: this.products[this.products.length - 1].id + 1 })
+    this.products.push(newProduct)
+    return newProduct
+
   }
 
   updateProduct(productReceived, idSearched) {
