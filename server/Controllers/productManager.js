@@ -17,28 +17,30 @@ class ProductManager {
   }
 
   getProducts() {
-    return this.products
+    const products = this.products
+    return products ? products : { error: 'There is not products' }
   }
 
   getProduct(id) {
-    return this.products.find(product => product.id == id)
+    const product = this.products.find(product => product.id == id)
+    return product || { error: `producto con id ${id} no encontrado` }
   }
 
   addProduct(product) {
     const newProduct = new CartItem({ ...product, id: this.products[this.products.length - 1].id + 1 })
-    this.products.push(newProduct)
-    return newProduct
+
+    return this.products.push(newProduct)
 
   }
 
-  updateProduct(productReceived, idSearched) {
-    const indexOfProduct = this.products.findIndex(product => product.id == idSearched)
-    if (indexOfProduct == 1) {
+  updateProduct(productReceived, idBuscado) {
+    const indexOfProduct = this.products.findIndex(product => product.id == idBuscado)
+    if (indexOfProduct == -1) {
       return false
     }
     else {
       const updatedProduct = {
-        id: idSearched,
+        id: idBuscado,
         timestamp: new Date().toLocaleString(),
         ...productReceived,
       }
@@ -47,9 +49,9 @@ class ProductManager {
     }
 
   }
-  deleteProduct(idSearched) {
-    const indexOfProduct = this.products.findIndex(product => product.id == idSearched)
-    if (indexOfProduct == 1) {
+  deleteProduct(idBuscado) {
+    const indexOfProduct = this.products.findIndex(product => product.id == idBuscado)
+    if (indexOfProduct == -1) {
       return false
     }
     else {
