@@ -8,7 +8,7 @@ const routerProducts = express.Router()
 const admin = false
 
 
-export const isAdmin = (req, res, next) => {
+const isAdmin = (req, res, next) => {
   if (!admin) {
     res.json({ error: -1, description: `Ruta ${req.route.path}, metodo ${req.method} no autorizado` })
   }
@@ -74,4 +74,4 @@ routerProducts.delete('/borrar/:id', isAdmin, (req, res) => {
 })
 
 
-export default routerProducts
+module.exports = routerProducts

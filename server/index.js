@@ -1,7 +1,11 @@
+
 const express = require('express')
 //import productsRoutes
 const routerProducts = require('./routes/products')
+
 //import cartRoutes
+const routerCart = require('./routes/cart')
+
 
 const PORT = 8080
 

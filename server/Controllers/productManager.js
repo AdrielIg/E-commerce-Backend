@@ -27,7 +27,7 @@ class ProductManager {
   }
 
   addProduct(product) {
-    const newProduct = new CartItem({ ...product, id: this.products[this.products.length - 1].id + 1 })
+    const newProduct = new Product({ ...product, id: this.products[this.products.length - 1].id + 1 })
 
     return this.products.push(newProduct)
 
@@ -63,4 +63,4 @@ class ProductManager {
 
 }
 
-export default ProductManager
+module.exports = ProductManager
