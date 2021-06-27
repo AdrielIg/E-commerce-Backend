@@ -7,7 +7,7 @@ class Product {
     this.stock = stock
     this.code = code
     this.id = id
-    this.timestamp = new Date.now()
+    this.timestamp = Date.now()
   }
 }
 
@@ -27,9 +27,16 @@ class ProductManager {
   }
 
   addProduct(product) {
-    const newProduct = new Product({ ...product, id: this.products[this.products.length - 1].id + 1 })
+    let newProduct;
+    if (this.products.length === 0) {
+      newProduct = new Product({ ...product, id: 1 })
+    }
+    else {
+      newProduct = new Product({ ...product, id: this.products[this.products.length - 1].id + 1 })
+    }
 
-    return this.products.push(newProduct)
+    this.products.push(newProduct)
+    return newProduct
 
   }
 
@@ -40,9 +47,10 @@ class ProductManager {
     }
     else {
       const updatedProduct = {
-        id: idBuscado,
-        timestamp: new Date().toLocaleString(),
+
         ...productReceived,
+        id: idBuscado,
+        timestamp: Date.now(),
       }
       this.products[indexOfProduct] = updatedProduct
       return updatedProduct

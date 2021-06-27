@@ -5,7 +5,7 @@ const productManager = new ProductManager()
 
 const routerProducts = express.Router()
 
-const admin = false
+const admin = true
 
 
 const isAdmin = (req, res, next) => {
@@ -16,7 +16,7 @@ const isAdmin = (req, res, next) => {
     next()
   }
 }
-
+//GET ALL THE PRODUCTS
 routerProducts.get('/listar', (req, res) => {
   try {
     const products = productManager.getProducts()
@@ -28,6 +28,7 @@ routerProducts.get('/listar', (req, res) => {
   }
 })
 
+//GET PRODUCT BY ID
 routerProducts.get('/listar/:id', (req, res) => {
   try {
     const product = productManager.getProduct(req.params.id)
@@ -38,6 +39,7 @@ routerProducts.get('/listar/:id', (req, res) => {
   }
 })
 
+//ADD A PRODUCT
 routerProducts.post('/agregar', isAdmin, (req, res) => {
   try {
 
@@ -53,6 +55,7 @@ routerProducts.post('/agregar', isAdmin, (req, res) => {
   }
 })
 
+//UPDATE A PRODUCT
 routerProducts.put('/actualizar/:id', isAdmin, (req, res) => {
   try {
     const product = productManager.updateProduct(req.body, req.params.id)
@@ -63,6 +66,7 @@ routerProducts.put('/actualizar/:id', isAdmin, (req, res) => {
   }
 })
 
+//DELETE PRODUCT
 routerProducts.delete('/borrar/:id', isAdmin, (req, res) => {
   try {
     const product = productManager.deleteProduct(req.params.id)
@@ -74,4 +78,5 @@ routerProducts.delete('/borrar/:id', isAdmin, (req, res) => {
 })
 
 
-module.exports = routerProducts
+module.exports = { routerProducts, productManager }
+

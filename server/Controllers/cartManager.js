@@ -1,5 +1,5 @@
 class CartItem {
-  constructor(product, id, timestamp) {
+  constructor(product) {
     this.product = product
     this.id = Date.now()
     this.timestamp = Date.now()
@@ -10,7 +10,6 @@ class CartManager {
   constructor() {
     this.cartProducts = []
   }
-
   getProducts() {
     return this.cartProducts
   }

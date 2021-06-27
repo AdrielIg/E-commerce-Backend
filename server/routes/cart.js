@@ -1,21 +1,15 @@
 const express = require('express')
+//import cartmanager
 const CartManager = require('../Controllers/cartManager')
 const cartManager = new CartManager()
-//Importar Product manager
+
+//Importar Product manager desde productos.js
+const products = require('../routes/products')
+const productManager = products.productManager
 const routerCart = express.Router()
 
-const admin = false
 
-
-const isAdmin = (req, res, next) => {
-  if (!admin) {
-    res.json({ error: -1, description: `Ruta ${req.route.path}, metodo ${req.method} no autorizado` })
-  }
-  else {
-    next()
-  }
-}
-
+//Get all cart items
 routerCart.get('/listar', (req, res) => {
   try {
     const products = cartManager.getProducts()
@@ -27,6 +21,7 @@ routerCart.get('/listar', (req, res) => {
   }
 })
 
+//get cart item by id
 routerCart.get('/listar/:id', (req, res) => {
   try {
     const product = cartManager.getProduct(req.params.id)
@@ -39,8 +34,8 @@ routerCart.get('/listar/:id', (req, res) => {
 
 
 
-//Aniadir el product que esta cargado en la clase de productManger de products.js
 
+//add a product to the cart
 routerCart.post('/agregar/:id', (req, res) => {
   try {
     const searchedProduct = productManager.getProduct(req.params.id)
@@ -53,6 +48,7 @@ routerCart.post('/agregar/:id', (req, res) => {
   }
 })
 
+//delete product of the cart
 routerCart.delete('/borrar/:id', (req, res) => {
   try {
     const product = cartManager.deleteProduct(req.params.id)
