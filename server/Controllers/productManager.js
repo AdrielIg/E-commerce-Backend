@@ -18,7 +18,7 @@ class ProductManager {
 
   getProducts() {
     const products = this.products
-    return products ? products : { error: 'There is not products' }
+    return products.length > 0 ? products : { error: 'There is not products' }
   }
 
   getProduct(id) {
@@ -41,20 +41,17 @@ class ProductManager {
   }
 
   updateProduct(productReceived, idBuscado) {
-    const indexOfProduct = this.products.findIndex(product => product.id == idBuscado)
-    if (indexOfProduct == -1) {
-      return false
-    }
-    else {
-      const updatedProduct = {
+    const product = this.products.find(prod => prod.id == idBuscado)
+    //In case of not updating a value , use the previous one
+    //keeping the same id and timestamp
+    product.name = productReceived.name || product.name
+    product.description = productReceived.description || product.description
+    product.price = productReceived.price || product.price
+    product.img = productReceived.img || product.img
+    product.stock = productReceived.stock || product.stock
+    product.code = productReceived.code || product.code
+    return product
 
-        ...productReceived,
-        id: idBuscado,
-        timestamp: Date.now(),
-      }
-      this.products[indexOfProduct] = updatedProduct
-      return updatedProduct
-    }
 
   }
   deleteProduct(idBuscado) {

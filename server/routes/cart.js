@@ -4,8 +4,8 @@ const CartManager = require('../Controllers/cartManager')
 const cartManager = new CartManager()
 
 //Importar Product manager desde productos.js
-const products = require('../routes/products')
-const productManager = products.productManager
+const productManager = require('../routes/products').productManager
+
 const routerCart = express.Router()
 
 
