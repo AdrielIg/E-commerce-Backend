@@ -1,9 +1,17 @@
 const express = require('express')
-const ProductManager = require('../Controllers/productManager')
 
-const productManager = new ProductManager()
 
 const routerProducts = express.Router()
+
+/* import Factory */
+const factory = require('../Factory/factory')
+/* const Persistencia = new factory(); */
+
+const Persistencia = factory.getPersistencia('mongo')
+const instancia = new Persistencia()
+instancia.connectDB()
+
+
 
 const admin = true
 
@@ -17,9 +25,9 @@ const isAdmin = (req, res, next) => {
   }
 }
 //GET ALL THE PRODUCTS
-routerProducts.get('/listar', (req, res) => {
+routerProducts.get('/listar', async (req, res) => {
   try {
-    const products = productManager.getProducts()
+    const products = await instancia.getProducts()
     res.status(200).json(products)
   }
   catch (err) {
@@ -29,9 +37,9 @@ routerProducts.get('/listar', (req, res) => {
 })
 
 //GET PRODUCT BY ID
-routerProducts.get('/listar/:id', (req, res) => {
+routerProducts.get('/listar/:id', async (req, res) => {
   try {
-    const product = productManager.getProduct(req.params.id)
+    const product = await instancia.getProduct(req.params.id)
     res.status(200).json(product)
   }
   catch (err) {
@@ -40,13 +48,14 @@ routerProducts.get('/listar/:id', (req, res) => {
 })
 
 //ADD A PRODUCT
-routerProducts.post('/agregar', isAdmin, (req, res) => {
+routerProducts.post('/agregar', isAdmin, async (req, res) => {
   try {
 
     //In case of validating input
     /* const { name, description, price, img, stock, code } = req.body */
 
-    const product = productManager.addProduct(req.body)
+    const product = await instancia.addProduct(req.body)
+
 
     res.status(200).json(product)
   }
@@ -56,9 +65,10 @@ routerProducts.post('/agregar', isAdmin, (req, res) => {
 })
 
 //UPDATE A PRODUCT
-routerProducts.put('/actualizar/:id', isAdmin, (req, res) => {
+routerProducts.put('/actualizar/:id', isAdmin, async (req, res) => {
   try {
-    const product = productManager.updateProduct(req.body, req.params.id)
+    const product = await instancia.updateProduct(req.params.id, req.body)
+
     res.status(200).json(product)
   }
   catch (err) {
@@ -67,10 +77,11 @@ routerProducts.put('/actualizar/:id', isAdmin, (req, res) => {
 })
 
 //DELETE PRODUCT
-routerProducts.delete('/borrar/:id', isAdmin, (req, res) => {
+routerProducts.delete('/borrar/:id', isAdmin, async (req, res) => {
   try {
-    const product = productManager.deleteProduct(req.params.id)
-    res.status(200).json(product)
+    const productDeleted = await instancia.deleteProduct(req.params.id)
+
+    res.status(200).json(productDeleted)
   }
   catch (err) {
     console.log(`Ha ocurrido un error: ${err}`)
@@ -78,5 +89,5 @@ routerProducts.delete('/borrar/:id', isAdmin, (req, res) => {
 })
 
 
-module.exports = { routerProducts, productManager }
+module.exports = routerProducts
 

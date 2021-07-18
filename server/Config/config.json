@@ -1,0 +1,11 @@
+{
+  "MONGO_URL": "mongodb://localhost:27017/ecommerce",
+  "mongo_atlas": "mongo_atlas",
+  "sql": "mysql",
+  "title": "BLOOns",
+    "description": "a game fight",
+    "price": 800,
+    "img": "google.com",
+    "stock": 5,
+    "code": 112
+}
