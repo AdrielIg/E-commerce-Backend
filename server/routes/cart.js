@@ -3,8 +3,8 @@ const express = require('express')
 const routerCart = express.Router()
 
 const factory = require('../Factory/factory')
-
-const Persistencia = factory.getPersistencia('mongo')
+const db = require('../Config/config.json').database
+const Persistencia = factory.getPersistencia(db)
 const instancia = new Persistencia()
 
 //Get all cart items

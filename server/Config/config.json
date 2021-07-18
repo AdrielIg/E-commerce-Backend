@@ -1,4 +1,4 @@
 {
   "MONGO_URL": "mongodb://localhost:27017/ecommerce",
-  "database": "mongo"  
+  "database": "mysql"  
 }
