@@ -22,7 +22,8 @@ const schema_cart = mongoose.Schema({
     img: String,
     stock: Number,
     code: Number,
-    timestamp: String
+    timestamp: String,
+    _id: String
   }
 
 });
@@ -33,7 +34,7 @@ const schema_cart = mongoose.Schema({
 /* SCHEMAS */
 const Productos = mongoose.model('products', schema_prod)
 
-const Cart = mongoose.model('cart', schema_cart)
+const Cart = mongoose.model('carts', schema_cart)
 
 class Mongo {
   constructor() { }
@@ -69,7 +70,7 @@ class Mongo {
   async addProduct({ title = '-', description = '-', price = 0, img = '-', stock = '-', code = 0 }) {
     try {
       const product = { title, description, price, img, stock, code };
-      console.log(product)
+
       const newProduct = await Productos.create({ ...product })
       return newProduct
 
@@ -123,9 +124,13 @@ class Mongo {
     }
   }
 
-  async addCart(newTitle, newDescription, newPrice, newImg, newStock, newCode) {
+  async addCart(id) {
     try {
-      const newCart = await Cart.create({ cart: { newTitle: title, newDescription: description, newPrice: price, newImg: img, newStock: stock, newCode: code } })
+      const product = await this.getProduct(id);
+      const { timestamp, _id, title, description, price, img, stock, code } = product
+      const productToAdd = { timestamp: timestamp, _id: _id, title: title, description: description, price: price, img: img, stock: stock, code: code }
+      console.log(product)
+      const newCart = await Cart.create({ cart: { ...productToAdd } })
 
       return newCart
     } catch (err) {

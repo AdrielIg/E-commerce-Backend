@@ -1,17 +1,13 @@
 const express = require('express')
-
-
 const routerProducts = express.Router()
 
 /* import Factory */
 const factory = require('../Factory/factory')
-/* const Persistencia = new factory(); */
-
-const Persistencia = factory.getPersistencia('mongo')
+/* import json name db */
+const db = require('../Config/config.json').database
+const Persistencia = factory.getPersistencia(db)
 const instancia = new Persistencia()
 instancia.connectDB()
-
-
 
 const admin = true
 

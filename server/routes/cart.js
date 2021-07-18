@@ -1,18 +1,16 @@
 const express = require('express')
-//import cartmanager
-const CartManager = require('../Controllers/cartManager')
-const cartManager = new CartManager()
-
-//Importar Product manager desde productos.js
-const productManager = require('../routes/products').productManager
 
 const routerCart = express.Router()
 
+const factory = require('../Factory/factory')
+
+const Persistencia = factory.getPersistencia('mongo')
+const instancia = new Persistencia()
 
 //Get all cart items
-routerCart.get('/listar', (req, res) => {
+routerCart.get('/listar', async (req, res) => {
   try {
-    const products = cartManager.getProducts()
+    const products = await instancia.getCarts()
     res.status(200).json(products)
   }
   catch (err) {
@@ -22,9 +20,9 @@ routerCart.get('/listar', (req, res) => {
 })
 
 //get cart item by id
-routerCart.get('/listar/:id', (req, res) => {
+routerCart.get('/listar/:id', async (req, res) => {
   try {
-    const product = cartManager.getProduct(req.params.id)
+    const product = await instancia.getCart(req.params.id)
     res.status(200).json(product)
   }
   catch (err) {
@@ -36,10 +34,10 @@ routerCart.get('/listar/:id', (req, res) => {
 
 
 //add a product to the cart
-routerCart.post('/agregar/:id', (req, res) => {
+routerCart.post('/agregar/:id', async (req, res) => {
   try {
-    const searchedProduct = productManager.getProduct(req.params.id)
-    const product = cartManager.addProductCart(searchedProduct)
+
+    const product = await instancia.addCart(req.params.id)
 
     res.status(200).json(product)
   }
@@ -49,9 +47,9 @@ routerCart.post('/agregar/:id', (req, res) => {
 })
 
 //delete product of the cart
-routerCart.delete('/borrar/:id', (req, res) => {
+routerCart.delete('/borrar/:id', async (req, res) => {
   try {
-    const product = cartManager.deleteProduct(req.params.id)
+    const product = await instancia.deleteCart(req.params.id)
     res.status(200).json(product)
   }
   catch (err) {
