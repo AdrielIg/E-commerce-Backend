@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+dotenv.config()
 
 
 
@@ -15,7 +17,7 @@ const schema_prod = mongoose.Schema({
 
 const schema_cart = mongoose.Schema({
   timestamp: { type: Date, default: new Date() },
-  cart: {
+  cart: [{
     title: String,
     description: String,
     price: Number,
@@ -24,7 +26,7 @@ const schema_cart = mongoose.Schema({
     code: Number,
     timestamp: String,
     _id: String
-  }
+  }]
 
 });
 
@@ -41,9 +43,9 @@ class Mongo {
   //Connect database
   async connectDB() {
     const MONGO_URL = require('../../Config/config.json').MONGO_URL
-    await mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect(process.env.MONGO_ATLAS, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    console.log('conexion a la base de datos realizada!');
+    console.log('conexion a la base de datos realizada!!');
   }
 
 
