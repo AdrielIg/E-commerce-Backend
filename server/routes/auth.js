@@ -28,23 +28,24 @@ routerAuth.get('/register', (req, res) => {
 
 /* Log In */
 
-/* routerAuth.post('/login', async (req, res, next) => {
+routerAuth.post('/login', (req, res, next) => {
 
-  await passport.authenticate('local', (err, user, info) => {
-    console.log('user reyt', info)
+  passport.authenticate('local', (err, user, info) => {
+
     if (err) throw err
     if (!user) res.send('User not exist')
     else {
       req.logIn(user, err => {
         if (err) throw err
-        res.send({ message: 'User Log In successfully!', user: req.user.email, data: req.user })
+
       })
+      res.redirect('/')
     }
   })(req, res, next)
 
   console.log('Login', req.body)
 
-})*/
+})
 
 routerAuth.get('/login', async (req, res) => {
   const pepe = await User.findOne({ email: 'test' })
@@ -52,13 +53,19 @@ routerAuth.get('/login', async (req, res) => {
   res.render('login')
 })
 
-routerAuth.get('/skere', (req, res) => {
+
+
+routerAuth.get('/logout', async (req, res) => {
+  req.logOut()
+  res.redirect('/login')
+})
+
+routerAuth.get('/user', async (req, res) => {
   if (req.isAuthenticated()) {
-    console.log('logueado rey')
-    console.log(req.user)
+    res.send(req.user)
   }
   else {
-    console.log('no logueado rey')
+    res.send('There is no user')
   }
 })
 

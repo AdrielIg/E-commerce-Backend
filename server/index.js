@@ -16,6 +16,8 @@ const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true }
 const routerProducts = require('./routes/products')
 /* import auth routes */
 const routerAuth = require('./routes/auth')
+/* Home */
+const routerHome = require('./routes/home')
 
 //import cartRoutes
 const routerCart = require('./routes/cart')
@@ -35,7 +37,7 @@ async function connectDB() {
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-app.use('/static', express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '../../public'));
 app.use(cookieParser('secret'))
 app.use(session({
   store: MongoStore.create({
@@ -76,31 +78,7 @@ app.set('views', './views')
 app.use('/productos', routerProducts);
 app.use('/carrito', routerCart);
 app.use(routerAuth);
-
-
-
-
-
-/* Route Login  */
-app.post('/login', (req, res, next) => {
-  console.log('El body', req.body)
-  passport.authenticate('local', (err, user, info) => {
-    console.log('user reyt', info)
-    if (err) throw err
-    if (!user) res.send('User not exist')
-    else {
-      req.logIn(user, err => {
-        if (err) throw err
-        res.send({ message: 'User Log In successfully!', user: req.user.email, data: req.user })
-      })
-    }
-  })(req, res, next)
-
-  console.log('Login', req.body)
-
-})
-
-
+app.use(routerHome)
 
 const server = app.listen(PORT || process.env.PORT, () => {
   console.log(`Server inicializado en el puerto: ${PORT}`)

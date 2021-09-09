@@ -42,7 +42,7 @@ class Mongo {
   constructor() { }
   //Connect database
   async connectDB() {
-    const MONGO_URL = require('../../Config/config.json').MONGO_URL
+
     await mongoose.connect(process.env.MONGO_ATLAS, { useNewUrlParser: true, useUnifiedTopology: true });
 
     console.log('conexion a la base de datos realizada!!');

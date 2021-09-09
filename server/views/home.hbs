@@ -1,0 +1,116 @@
+<nav>
+  <div>
+    <h2>Welcome {{name}}</h2>
+  <h2> {{email}}</h2>
+  </div>
+  
+  <a href="/logout">Logout</a>
+</nav>
+<section class="wrapper">
+  <div class="products-center">
+
+   
+
+  </div>
+   <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    
+</section>
+
+<style>
+  nav{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  nav > a{
+    text-decoration: none;
+    background-color: red;
+    color: white;
+    padding: .5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  nav > a:hover{
+    transform: scale(1.1);
+    
+  }
+  .wrapper{
+    border: 2px solid red;
+    width: 100%;
+    min-height: 50vh;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .products-center{
+    border: 2px solid blue;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .product{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .product > img{
+    width: 2px;
+    height: 3px;
+  }
+</style>
+
+<script>
+  const center = document.querySelector('.products-center')
+
+  const productoHtml = Handlebars.compile(`
+  {{#if productosExisten}}
+  <div >    
+      {{#each productos}}
+          <img src={{this.img}} alt={{this.img}}>
+          <h4>{{this.title}}</h4>
+          <p>{{this.description}}</p>
+          <p>stock: {{this.stock}}</p>
+          <p>{{this.price}}</p>
+      {{/each}}
+    
+  </div>
+  {{else}}
+    <h3 class="alert alert-warning">No se encontraron productos</h3>
+  {{/if}}
+`);
+
+//Pasar datos a template y renderizar dentro de tabla
+const productosRender = productos => {
+  console.log('los prod', productos.length)
+  const html = productoHtml({ productos: productos, productosExisten: true});
+  center.innerHTML = html;
+}
+function render(data){
+  data.forEach(product => {
+ center.innerHTML = center.innerHTML +
+ 
+  `
+  <div classname='product'> 
+  <img src=${product.img} alt=${product.img}>
+          <h4>${product.title}</h4>
+          <p>${product.description}</p>
+          <p>stock: ${product.stock}</p>
+          <p>${product.price}</p>
+  </div>`
+  })
+ 
+}
+const fetchProductos = async () => {
+  const response = await fetch('/productos/listar')
+  const data = await response.json()
+  console.log(data)
+  render(data)
+}
+fetchProductos()
+
+
+    
+</script>
