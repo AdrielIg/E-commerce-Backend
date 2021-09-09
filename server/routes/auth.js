@@ -6,7 +6,7 @@ const routerAuth = express.Router()
 
 /* Register */
 routerAuth.post('/register', (req, res) => {
-  User.findOne({ email: req.body.email }, async (err, doc) => {
+  User.findOne({ username: req.body.username }, async (err, doc) => {
     if (err) throw err
     if (doc) res.send('User already exist')
     if (!doc) {
@@ -50,6 +50,16 @@ routerAuth.get('/login', async (req, res) => {
   const pepe = await User.findOne({ email: 'test' })
   console.log(pepe)
   res.render('login')
+})
+
+routerAuth.get('/skere', (req, res) => {
+  if (req.isAuthenticated()) {
+    console.log('logueado rey')
+    console.log(req.user)
+  }
+  else {
+    console.log('no logueado rey')
+  }
 })
 
 

@@ -85,7 +85,7 @@ app.use(routerAuth);
 app.post('/login', (req, res, next) => {
   console.log('El body', req.body)
   passport.authenticate('local', (err, user, info) => {
-    console.log('user reyt', user)
+    console.log('user reyt', info)
     if (err) throw err
     if (!user) res.send('User not exist')
     else {
