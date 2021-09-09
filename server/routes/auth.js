@@ -5,7 +5,7 @@ const passport = require('passport')
 const routerAuth = express.Router()
 
 /* Register */
-/* routerAuth.post('/register', (req, res) => {
+routerAuth.post('/register', (req, res) => {
   User.findOne({ email: req.body.email }, async (err, doc) => {
     if (err) throw err
     if (doc) res.send('User already exist')
@@ -19,7 +19,7 @@ const routerAuth = express.Router()
     }
   })
   console.log('Usuario registrado!!!:', req.body)
-}) */
+})
 
 routerAuth.get('/register', (req, res) => {
 
@@ -44,13 +44,13 @@ routerAuth.get('/register', (req, res) => {
 
   console.log('Login', req.body)
 
-})
+})*/
 
 routerAuth.get('/login', async (req, res) => {
   const pepe = await User.findOne({ email: 'test' })
   console.log(pepe)
   res.render('login')
-}) */
+})
 
 
 module.exports = routerAuth

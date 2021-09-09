@@ -54,7 +54,7 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
-/* require('./lib/passportConfig')(passport) */
+require('./lib/passportConfig')(passport)
 
 //Handlebars
 app.engine(
@@ -77,123 +77,12 @@ app.use('/productos', routerProducts);
 app.use('/carrito', routerCart);
 app.use(routerAuth);
 
-/* PASSPORT DECLARATION */
-passport.use('login', new LocalStrategy({
-  passReqToCallback: true
-},
-  function (req, email, password, done) {
-    /* Buscando nombre en base de datos */
-    User.findOne({ email: email }, (err, user) => {
-      if (err) {
-        return done(err)
-      }
-      /* Si el usuario no existe */
-      if (!user) {
-        console.log('El usuario no existe rey: ' + email)
-        return done(null, false, console.log('message', 'Usario no encontrado'))
-      }
-      /* Si el usuario existe pero la pass es erronea */
-      if (!isValidPassword(user, password)) {
-        console.log('Contrasenia erronea')
-        return done(null, false, console.log('message', 'Contrasenia erronea pa'))
-      }
-      return done(null, user)
-    })
-  }))
 
-/* Compara hash */
-const isValidPassword = (user, password) => {
-  console.log('error')
-  return bCrypt.compareSync(password, user.paswword)
-}
-
-passport.use('signup', new LocalStrategy({
-  passReqToCallback: true
-},
-  function (req, username, password, done) {
-    console.log('req:', req)
-    console.log('pass:', password)
-    console.log('email:', username)
-    findOrCreateUser = function () {
-      User.findOne({ email: username }, async function (err, user) {
-        /* En caso de error */
-        if (err) {
-          console.log('Error registrandose', err)
-          return done(err)
-        }
-        /* Si ya existe el usuario */
-        if (user) {
-          console.log('Ese usuario ya existe rey')
-          return done(null, false, console.log('message', 'Este usuario ya existe '));
-        } else {
-          /* creamos nuevo usuario */
-          let newUser = new User()
-          newUser.email = username
-          newUser.password = await createHash(password)
-          /* guardamos usuario */
-          newUser.save(function (err) {
-            if (err) {
-              console.log('Hubo un error en guardar user: ' + err)
-              throw err
-            }
-            console.log('user registado')
-            return done(null, newUser)
-          })
-        }
-      })
-    }
-  }))
-
-const createHash = function (password) {
-  console.log('error')
-  return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-}
-
-passport.serializeUser(function (user, done) {
-  console.log('error')
-  done(null, user);
-});
-
-passport.deserializeUser(function (user, done) {
-  console.log('error')
-  done(null, user);
-});
-
-app.get('/login', (req, res) => {
-  res.render('login')
-})
-app.get('/signup', (req, res) => {
-  res.render('register')
-})
-
-app.get('/error', (req, res) => {
-  res.render('error')
-})
-
-app.get('/yes', (req, res) => {
-  res.render('yes')
-})
-
-app.post('/login', passport.authenticate('login', { failureRedirect: '/error' }), async (req, res) => {
-  try {
-    res.redirect('/yes')
-    return
-
-  }
-  catch (err) {
-    console.log(err)
-  }
-})
-
-
-app.post('/signup', passport.authenticate('signup', { failureRedirect: '/error' }), (req, res) => {
-  res.redirect('/login')
-})
 
 
 
 /* Route Login  */
-/* app.post('/login', (req, res, next) => {
+app.post('/login', (req, res, next) => {
   console.log('El body', req.body)
   passport.authenticate('local', (err, user, info) => {
     console.log('user reyt', user)
@@ -209,7 +98,7 @@ app.post('/signup', passport.authenticate('signup', { failureRedirect: '/error' 
 
   console.log('Login', req.body)
 
-}) */
+})
 
 
 
